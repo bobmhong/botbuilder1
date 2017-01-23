@@ -1,16 +1,17 @@
 {
-  "name": "botbuilder1",
-  "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
-  "scripts": {
-    "start": "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "botbuilder": "^3.5.3",
-    "restify": "^4.3.0"
-  }
+    "name": "botbuilder1",
+    "version": "1.0.0",
+    "description": "",
+    "main": "app.js",
+    "scripts": {
+        "start": "node app.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "botbuilder": "^3.5.3",
+        "npmlog": "^4.0.2",
+        "restify": "^4.3.0"
+    }
 }
