@@ -2,6 +2,9 @@ var restify = require('restify');
 var builder = require('botbuilder');
 var log = require('npmlog');
 
+require('./api/model/db');
+var mongoose = require('mongoose');
+var ThankYou = mongoose.model('ThankYou');
 //=========================================================
 // Bot Setup
 //=========================================================
@@ -38,7 +41,8 @@ bot.dialog('/', intents);
 
 intents.matches('SendThanks', [
     function(session, args, next) {
-        //var address = JSON.stringify(session.message.address);
+        var address = JSON.stringify(session.message.address);
+
         log.info('SendThanks Intent', 'Address: %j', session.message.address);
         log.info('SendThanks Intent', 'Entities: ', JSON.stringify(args.entities));
         // save the passed args in the session
@@ -87,9 +91,23 @@ intents.matches('SendThanks', [
             session.dialogData.reason = results.response;
         }
         session.sendTyping();
-        log.info('Sending Thanks...', "Ok...%s to %s for %s.", session.dialogData.appreciationVerb, session.dialogData.recipient, session.dialogData.reason);
-        session.send("Ok...%s to %s for %s.", session.dialogData.appreciationVerb, session.dialogData.recipient, session.dialogData.reason);
-        session.endDialog();
+        ThankYou.create({
+            userid: session.message.address.user.id,
+            username: session.message.address.user.name,
+            appreciationVerb: session.dialogData.appreciationVerb,
+            recipient: session.dialogData.recipient,
+            reason: session.dialogData.reason
+        }, function(err, location) {
+            if (err) {
+                log.info('Oops, there was a problem saving your thank you. ', err);
+                session.send('Oops, there was a problem saving your thank you. ', err);
+                session.endDialog();
+            } else {
+                log.info('Sending Thanks...', "Ok...%s to %s for %s.", session.dialogData.appreciationVerb, session.dialogData.recipient, session.dialogData.reason);
+                session.send("Ok...%s to %s for %s.", session.dialogData.appreciationVerb, session.dialogData.recipient, session.dialogData.reason);
+                session.endDialog();
+            }
+        });
     }
 ]);
 

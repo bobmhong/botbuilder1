@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
 
-session.dialogData.appreciationVerb, session.dialogData.recipient, session.dialogData.reason
-
 var thankYouSchema = new mongoose.Schema({
+    userid: { type: String },
+    username: { type: String },
     appreciationVerb: { type: String, required: true },
     recipient: { type: String, required: true },
     reason: { type: String, required: true },
